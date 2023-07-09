@@ -6,9 +6,17 @@
 }
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   height: 60px;
 }
 
+.cart-icon {
+  font-size: 30px;
+  margin-right: 15px;
+  cursor: pointer;
+}
 .pageContent {
   display: flex;
   flex: 1;
@@ -17,4 +25,13 @@
 .footer {
   height: 60px;
   background-color: black;
+}
+
+.item-card-image {
+  height: 150px !important;
+  object-fit: scale-down;
+}
+
+.product-card, .product-ribbon {
+  margin: 8px;
 }
