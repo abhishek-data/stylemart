@@ -47,6 +47,7 @@ const Products = () => {
       } else if (sortOrder === "highlow") {
         return a.price < b.price ? 1 : a.price === b.price ? 0 : -1;
       }
+      return 0;
     });
     return _sortedItems;
   };
@@ -66,7 +67,6 @@ const Products = () => {
 
     fetchProducts();
   }, [params]);
-
 
   return (
     <div className="product-container">
