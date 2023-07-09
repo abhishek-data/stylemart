@@ -92,7 +92,6 @@ const AppCart = () => {
   const [cartProduct, setCartProduct] = useState([]);
   const onConfirmOrder = (values) => {
     message.success("Your Order is confirmed");
-    console.log(values);
     setIsCheckout(false);
     setCartOpen(false);
   };

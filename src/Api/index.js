@@ -1,6 +1,7 @@
 import axios from "axios";
 import { notification } from "antd";
 
+
 export const getAllPrducts = async () => {
   try {
     const response = await axios.get("https://dummyjson.com/products");
