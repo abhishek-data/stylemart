@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { getAllPrducts, getProductsByCategory, addToCartHandler } from "../../Api";
+import {
+  getAllPrducts,
+  getProductsByCategory,
+  addToCartHandler,
+} from "../../Api";
 import {
   List,
   Card,
@@ -9,19 +13,50 @@ import {
   Rate,
   Button,
   message,
-  Spin
+  Spin,
+  Select,
 } from "antd";
 import { useParams } from "react-router-dom";
 
 const Products = () => {
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState([]);
+  const [sortOrder, setsortOrder] = useState([]);
   const params = useParams();
+
+  const getSorteditems = () => {
+    const sortedItems = [...items];
+    const _sortedItems = sortedItems.sort((a, b) => {
+      const aLowerCaseTitle = a.title.toLowerCase();
+      const bLowerCaseTitle = b.title.toLowerCase();
+
+      if (sortOrder === "az") {
+        return aLowerCaseTitle > bLowerCaseTitle
+          ? 1
+          : aLowerCaseTitle === bLowerCaseTitle
+          ? 0
+          : -1;
+      } else if (sortOrder === "za") {
+        return aLowerCaseTitle < bLowerCaseTitle
+          ? 1
+          : aLowerCaseTitle === bLowerCaseTitle
+          ? 0
+          : -1;
+      } else if (sortOrder === "lowhigh") {
+        return a.price > b.price ? 1 : a.price === b.price ? 0 : -1;
+      } else if (sortOrder === "highlow") {
+        return a.price < b.price ? 1 : a.price === b.price ? 0 : -1;
+      }
+    });
+    return _sortedItems;
+  };
   useEffect(() => {
     setLoading(true);
     const fetchProducts = async () => {
       try {
-        const products = await (params?.categoryId ? getProductsByCategory(params.categoryId): getAllPrducts());
+        const products = await (params?.categoryId
+          ? getProductsByCategory(params.categoryId)
+          : getAllPrducts());
         setItems(products["products"]);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -31,12 +66,37 @@ const Products = () => {
 
     fetchProducts();
   }, [params]);
-  if(loading) {
-    return <Spin spinning/>
-  }
+
+
   return (
-    <div>
+    <div className="product-container">
+      <div>
+        <Typography.Text>Filter</Typography.Text>
+        <Select
+          defaultValue={"az"}
+          onChange={(value) => setsortOrder(value)}
+          options={[
+            {
+              label: "Alphabatically a-z",
+              value: "az",
+            },
+            {
+              label: "Alphabatically z-a",
+              value: "za",
+            },
+            {
+              label: "Price Low To High",
+              value: "lowhigh",
+            },
+            {
+              label: "Price High To Low",
+              value: "highlow",
+            },
+          ]}
+        ></Select>
+      </div>
       <List
+        loading={loading}
         grid={{ column: 3 }}
         renderItem={(product, index) => {
           return (
@@ -84,7 +144,7 @@ const Products = () => {
             </Badge.Ribbon>
           );
         }}
-        dataSource={items}
+        dataSource={getSorteditems()}
       ></List>
     </div>
   );

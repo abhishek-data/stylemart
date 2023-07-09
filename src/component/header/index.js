@@ -79,7 +79,7 @@ const Header = () => {
   };
   return (
     <div className="header">
-      <Menu mode="horizontal" items={items} onClick={onMenuClick}></Menu>
+      <Menu mode="horizontal" items={items} onClick={onMenuClick} className="app-menu"></Menu>
       <Typography.Title>Style Mart</Typography.Title>
       <AppCart />
     </div>
@@ -92,6 +92,7 @@ const AppCart = () => {
   const [cartProduct, setCartProduct] = useState([]);
   const onConfirmOrder = (values) => {
     message.success("Your Order is confirmed");
+    console.log(values);
     setIsCheckout(false);
     setCartOpen(false);
   };
@@ -113,7 +114,7 @@ const AppCart = () => {
   }, []);
   return (
     <div>
-      <Badge count={7} className="cart-icon" onClick={() => setCartOpen(true)}>
+      <Badge count={cartProduct.length} className="cart-icon" onClick={() => setCartOpen(true)}>
         <ShoppingCartOutlined />
       </Badge>
       <Drawer
